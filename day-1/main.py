@@ -1,6 +1,8 @@
 
-def part_one():
-    input_file = 'input.txt'
+def part_one(input_file):
+    def digit(s):
+        return s if s.isdigit() else ''
+
     first_digit = ''
     last_digit = ''
     total = 0
@@ -11,20 +13,24 @@ def part_one():
                 break
             line = line.rstrip('\n')
             for i in range(len(line)):
-                if line[i].isdigit() and not first_digit:
-                    first_digit = line[i]
-                if line[-1-i].isdigit() and not last_digit:
-                    last_digit = line[-1-i]
+                if not first_digit:
+                    first_digit = digit(line[i])
+                if not last_digit:
+                    last_digit = digit(line[-1-i])
                 if first_digit and last_digit:
                     break
 
             total += int(first_digit + last_digit)
             first_digit = ''
             last_digit = ''
+
     return total
 
 
-def part_two():
+def part_two(input_file):
+    def digit(s):
+        return s if s.isdigit() else ''
+
     def build_str_digit_dict():
         str_digits = {'one': '1', 'two': '2', 'three': '3', 'four': '4',
                       'five': '5', 'six': '6', 'seven': '7', 'eight': '8', 'nine': '9'}
@@ -41,20 +47,19 @@ def part_two():
     def str_digit_value(str_digit_dict, s):
         current = str_digit_dict
         for c in s:
-            if current.get('value', None):
+            if current.get('value', ''):
                 return current['value']
             if ord(c) in current:
                 current = current[ord(c)]
                 continue
-            return None
-        return current.get('value', None)
+            return ''
+        return current.get('value', '')
 
-    input_file = 'input.txt'
     str_digit_dict = build_str_digit_dict()
-
     first_digit = ''
     last_digit = ''
     total = 0
+
     with open(input_file, 'r') as data:
         while True:
             line = data.readline()
@@ -63,21 +68,19 @@ def part_two():
             line = line.rstrip('\n')
             for i in range(len(line)):
                 if not first_digit:
-                    if line[i].isdigit():
-                        first_digit = line[i]
-                    elif str_digit_value(str_digit_dict, line[i:]):
+                    first_digit = digit(line[i])
+                    if not first_digit:
                         first_digit = str_digit_value(str_digit_dict, line[i:])
                 if not last_digit:
-                    if line[-1-i].isdigit():
-                        last_digit = line[-1-i]
-                    else:
+                    last_digit = digit(line[-1-i])
+                    if not last_digit:
                         for x in range(2, 5):
-                            s = line[-1-i-x:]
-                            for ii in range(len(s)):
+                            sub = line[-1-i-x:]
+                            for ii in range(len(sub)):
                                 if line[-1-ii].isdigit():
                                     last_digit = line[-1-ii]
-                            if str_digit_value(str_digit_dict, s):
-                                last_digit = str_digit_value(str_digit_dict, s)
+                            if str_digit_value(str_digit_dict, sub):
+                                last_digit = str_digit_value(str_digit_dict, sub)
                                 break
                 if first_digit and last_digit:
                     break
@@ -88,5 +91,8 @@ def part_two():
 
 
 if __name__ == '__main__':
-    print('part one calibration total : {}'.format(part_one()))
-    print('part two calibration total : {}'.format(part_two()))
+    input_file = 'input.txt'
+    results_file = 'results.txt'
+    with open(results_file, 'w') as results:
+        results.write('part 1 - {}\n'.format(part_one(input_file)))
+        results.write('part 2 - {}\n'.format(part_two(input_file)))

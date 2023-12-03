@@ -1,14 +1,22 @@
 
 def part_one(input_file):
     with open(input_file, 'r') as data:
-        pass
+        while True:
+            line = data.readline()
+            if not line:
+                break
+            line = line.rstrip('\n')
 
     return
 
 
 def part_two(input_file):
     with open(input_file, 'r') as data:
-        pass
+        while True:
+            line = data.readline()
+            if not line:
+                break
+            line = line.rstrip('\n')
 
     return
 

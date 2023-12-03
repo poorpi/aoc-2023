@@ -27,10 +27,26 @@ def part_one(input_file):
 
 
 def part_two(input_file):
+    total_power = 0
     with open(input_file, 'r') as data:
-        pass
-
-    return
+        while True:
+            line = data.readline()
+            if not line:
+                break
+            line = line.rstrip('\n')
+            s = line.split(': ')
+            id = s[0].split(' ')[1]
+            max_count = {'green': 1, 'red': 1, 'blue': 1}
+            for game in s[1].split('; '):
+                for count in game.split(', '):
+                    amount = count.split(' ')[0]
+                    color = count.split(' ')[1]
+                    max_count[color] = max(max_count[color], int(amount))
+            power = 1
+            for k, v in max_count.items():
+                power *= v
+            total_power += power
+    return total_power
 
 
 if __name__ == '__main__':

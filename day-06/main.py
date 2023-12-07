@@ -1,9 +1,6 @@
 
 def part_one(input_file):
     with open(input_file, 'r') as data:
-        def distance(time, speed):
-            return time * speed
-
         times = [int(x) for x in data.readline().split(':')[1].split()]
         distances = [int(x) for x in data.readline().split(':')[1].split()]
 
@@ -11,7 +8,7 @@ def part_one(input_file):
         for race in range(len(times)):
             num_wins = 0
             for i in range(times[race]):
-                if distance(times[race] - i, i) > distances[race]:
+                if (times[race] - i) * i > distances[race]:
                     num_wins += 1
             total_wins_mul *= num_wins
     return total_wins_mul
@@ -19,13 +16,18 @@ def part_one(input_file):
 
 def part_two(input_file):
     with open(input_file, 'r') as data:
-        while True:
-            line = data.readline()
-            if not line:
-                break
-            line = line.rstrip('\n')
+        max_time = int(''.join(data.readline().split(':')[1].split()))
+        target_distance = int(''.join(data.readline().split(':')[1].split()))
 
-    return
+        for i in range(max_time):
+            if (max_time - i) * i > target_distance:
+                first_win = i
+                break
+        for i in range(max_time - first_win + 1, 0, -1):
+            if (max_time - i) * i > target_distance:
+                last_win = i
+                break
+    return last_win - first_win + 1
 
 
 if __name__ == '__main__':
